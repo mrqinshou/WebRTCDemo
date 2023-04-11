@@ -1,0 +1,178 @@
+<html>
+
+<head>
+	<title>Local Demo</title>
+	<style>
+		body {
+			overflow: hidden;
+			margin: 0px;
+			padding: 0px;
+		}
+
+		#local_view {
+			width: 100%;
+			height: 100%;
+		}
+
+		#remote_view {
+			width: 9%;
+			height: 16%;
+			position: absolute;
+			top: 10%;
+			right: 10%;
+		}
+
+		#left {
+			width: 10%;
+			height: 5%;
+			position: absolute;
+			left: 10%;
+			top: 10%;
+		}
+
+		.my_button {
+			width: 100%;
+			height: 100%;
+			display: block;
+			margin-bottom: 10%;
+		}
+	</style>
+</head>
+
+<body>
+	<video id="local_view" autoplay controls muted></video>
+	<video id="remote_view" autoplay controls muted></video>
+
+	<div id="left">
+		<button id="btn_call" class="my_button" onclick="call()">呼叫</button>
+		<button id="btn_hang_up" class="my_button" onclick="hangUp()">挂断</button>
+	</div>
+</body>
+
+<script type="text/javascript">
+	var localView = document.getElementById("local_view");
+	var remoteView = document.getElementById("remote_view");
+	var localStream;
+	let localPeerConnection;
+
+	function call() {
+		// 创建 PeerConnection
+		localPeerConnection = new RTCPeerConnection();
+		localPeerConnection.onicecandidate = function (event) {
+			console.log("onicecandidate--->" + event.candidate);
+			let iceCandidate = event.candidate;
+			if (iceCandidate == null) {
+				return;
+			}
+			sendIceCandidate(localPeerConnection, iceCandidate);
+		}
+		// 为 PeerConnection 添加音轨、视轨
+		for (let i = 0; localStream != null && i < localStream.getTracks().length; i++) {
+			const track = localStream.getTracks()[i];
+			localPeerConnection.addTrack(track, localStream);
+		}
+		// 通过 PeerConnection 创建 offer，获取 sdp
+		// createOffer();
+		localPeerConnection.createOffer().then(function (sessionDescription) {
+			console.log("create offer success.");
+			// 4. 将 offer sdp 作为参数 setLocalDescription；
+			localPeerConnection.setLocalDescription(sessionDescription).then(function () {
+				console.log("set local sdp success.");
+				// 5. 发送 offer sdp
+				sendOffer(sessionDescription)
+			})
+		})
+	}
+
+	function sendOffer(offer) {
+		receivedOffer(offer);
+	}
+
+	function receivedOffer(offer) {
+		// 创建 PeerConnection
+		remotePeerConnection = new RTCPeerConnection();
+		remotePeerConnection.onicecandidate = function (event) {
+			console.log("onicecandidate--->" + event.candidate);
+			let iceCandidate = event.candidate;
+			if (iceCandidate == null) {
+				return;
+			}
+			sendIceCandidate(peerConnection, iceCandidate);
+		}
+		remotePeerConnection.ontrack = function (event) {
+			console.log("remote ontrack--->" + event.streams);
+			let streams = event.streams;
+			if (streams && streams.length > 0) {
+				remoteView.srcObject = streams[0];
+			}
+		}
+		// 将 offer sdp 作为参数 setRemoteDescription
+		remotePeerConnection.setRemoteDescription(offer).then(function () {
+			console.log("set remote sdp success.");
+			// 通过 PeerConnection 创建 answer，获取 sdp；
+			remotePeerConnection.createAnswer().then(function (sessionDescription) {
+				console.log("create answer success.");
+				// 将 answer sdp 作为参数 setLocalDescription；
+				remotePeerConnection.setLocalDescription(sessionDescription).then(function () {
+					console.log("set local sdp success.");
+					// 发送 answer sdp；
+					sendAnswer(sessionDescription);
+				})
+			})
+		})
+	}
+
+	function sendAnswer(answer) {
+		receivedAnswer(answer)
+	}
+
+	function receivedAnswer(answer) {
+		// 收到 answer sdp，将 answer sdp 作为参数 setRemoteDescription
+		localPeerConnection.setRemoteDescription(answer).then(function () {
+			console.log("set remote sdp success.");
+		})
+	}
+
+	function sendIceCandidate(peerConnection, iceCandidate) {
+		receivedCandidate(peerConnection, iceCandidate);
+	}
+
+	function receivedCandidate(peerConnection, iceCandidate) {
+		if (peerConnection == localPeerConnection) {
+			remotePeerConnection.addIceCandidate(iceCandidate);
+		} else {
+			localPeerConnection.addIceCandidate(iceCandidate);
+		}
+	}
+
+	function hangUp() {
+		if (localPeerConnection != null) {
+			localPeerConnection.close();
+			localPeerConnection = null;
+		}
+		if (remotePeerConnection != null) {
+			remotePeerConnection.close();
+			remotePeerConnection = null;
+		}
+		remoteView.removeAttribute('src');
+		remoteView.load();
+	}
+
+	navigator.mediaDevices.getUserMedia({ audio: true, video: true }).then(function (mediaStream) {
+		// 初始化 PeerConnectionFactory；
+		// 创建 EglBase；
+		// 创建 PeerConnectionFactory；
+		// 创建音轨；
+		// 创建视轨；
+		localStream = mediaStream;
+		// 初始化本地视频渲染控件；
+		// 初始化远端视频渲染控件；
+		// 开始本地渲染。
+		localView.srcObject = mediaStream;
+	}).catch(function (error) {
+		console.log("error--->" + error);
+	})
+
+</script>
+
+</html>
