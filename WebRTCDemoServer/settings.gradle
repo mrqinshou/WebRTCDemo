@@ -10,12 +10,8 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        // 阿里云 maven 镜像
-        maven {
-            allowInsecureProtocol = true
-            url 'http://maven.aliyun.com/nexus/content/groups/public/'
-        }
     }
 }
-rootProject.name = "WebRTCDemo-Android"
+rootProject.name = "WebRTCDemo-Server"
 include ':app'
+include ':WebRTCDemoServer'

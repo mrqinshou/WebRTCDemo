@@ -50,10 +50,11 @@
 </body>
 
 <script type="text/javascript">
-	var localView = document.getElementById("local_view");
-	var remoteView = document.getElementById("remote_view");
+	let localView = document.getElementById("local_view");
+	let remoteView = document.getElementById("remote_view");
 	var localStream;
-	let localPeerConnection;
+	var localPeerConnection;
+	var remotePeerConnection;
 
 	function call() {
 		// 创建 PeerConnection
@@ -72,13 +73,12 @@
 			localPeerConnection.addTrack(track, localStream);
 		}
 		// 通过 PeerConnection 创建 offer，获取 sdp
-		// createOffer();
 		localPeerConnection.createOffer().then(function (sessionDescription) {
 			console.log("create offer success.");
-			// 4. 将 offer sdp 作为参数 setLocalDescription；
+			// 将 offer sdp 作为参数 setLocalDescription；
 			localPeerConnection.setLocalDescription(sessionDescription).then(function () {
 				console.log("set local sdp success.");
-				// 5. 发送 offer sdp
+				// 发送 offer sdp
 				sendOffer(sessionDescription)
 			})
 		})
@@ -97,7 +97,7 @@
 			if (iceCandidate == null) {
 				return;
 			}
-			sendIceCandidate(peerConnection, iceCandidate);
+			sendIceCandidate(remotePeerConnection, iceCandidate);
 		}
 		remotePeerConnection.ontrack = function (event) {
 			console.log("remote ontrack--->" + event.streams);
@@ -123,7 +123,7 @@
 	}
 
 	function sendAnswer(answer) {
-		receivedAnswer(answer)
+		receivedAnswer(answer);
 	}
 
 	function receivedAnswer(answer) {

@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace 'com.qinshou.webrtcdemo_android'
+    namespace 'com.qinshou.webrtcdemo_server'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.qinshou.webrtcdemo_android"
+        applicationId "com.qinshou.webrtcdemo_server"
         minSdk 21
         targetSdk 33
         versionCode 1
@@ -32,12 +32,7 @@ dependencies {
 
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'com.google.android.material:material:1.5.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
-    // WebRTC
-    implementation 'org.webrtc:google-webrtc:1.0.32006'
-    // WebSocket
-    implementation 'org.java-websocket:Java-WebSocket:1.5.3'
 }

@@ -25,12 +25,12 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, LocalDemoActivity.class));
             }
         });
-//        findViewById(R.id.btn_p2p_demo).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                startActivity(new Intent(MainActivity.this, P2PDemoActivity.class));
-//            }
-//        });
+        findViewById(R.id.btn_p2p_demo).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, P2PDemoActivity.class));
+            }
+        });
 //        findViewById(R.id.btn_multiple_demo).setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
