@@ -74,17 +74,17 @@ public class WebSocketClientHelper {
         mWebSocketClient.connect();
     }
 
-    public void send(String message) {
-        if (mWebSocketClient == null) {
-            return;
-        }
-        mWebSocketClient.send(message);
-    }
-
     public void disconnect() {
         if (mWebSocketClient == null) {
             return;
         }
         mWebSocketClient.close();
+    }
+
+    public void send(String message) {
+        if (mWebSocketClient == null) {
+            return;
+        }
+        mWebSocketClient.send(message);
     }
 }

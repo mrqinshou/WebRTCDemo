@@ -89,7 +89,6 @@
 	function call() {
 		// 创建 PeerConnection
 		peerConnection = createPeerConnection();
-		console.log("peerConnection--->" + peerConnection);
 		// 为 PeerConnection 添加音轨、视轨
 		for (let i = 0; localStream != null && i < localStream.getTracks().length; i++) {
 			const track = localStream.getTracks()[i];
@@ -201,7 +200,6 @@
 	function connect() {
 		let inputServerUrl = document.getElementById("input_server_url");
 		let pWebsocketState = document.getElementById("p_websocket_state");
-
 		let url = inputServerUrl.value;
 		websocket = new WebSocket(url);
 		websocket.onopen = function () {

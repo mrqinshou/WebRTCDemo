@@ -42,7 +42,7 @@
             android:id="@+id/tv_websocket_state"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="WebSocketServer 已断开"
+            android:text="WebSocket 已断开"
             android:textColor="#FFFFFFFF" />
 
         <androidx.appcompat.widget.AppCompatEditText
