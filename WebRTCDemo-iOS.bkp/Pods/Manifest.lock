@@ -1,0 +1,24 @@
+PODS:
+  - GoogleWebRTC (1.1.32000)
+  - SnapKit (5.6.0)
+  - Starscream (4.0.4)
+
+DEPENDENCIES:
+  - GoogleWebRTC (~> 1.1.31999)
+  - SnapKit (~> 5.6.0)
+  - Starscream (~> 4.0.0)
+
+SPEC REPOS:
+  trunk:
+    - GoogleWebRTC
+    - SnapKit
+    - Starscream
+
+SPEC CHECKSUMS:
+  GoogleWebRTC: 4d261187b30512efdb711d21fa961a6adf138717
+  SnapKit: e01d52ebb8ddbc333eefe2132acf85c8227d9c25
+  Starscream: 5178aed56b316f13fa3bc55694e583d35dd414d9
+
+PODFILE CHECKSUM: caef17643adbe1da96dcfba5e9e24271ead39417
+
+COCOAPODS: 1.11.3
