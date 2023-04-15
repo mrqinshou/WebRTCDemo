@@ -1,0 +1,372 @@
+<html>
+
+<head>
+    <title>Multiple Demo</title>
+    <style>
+        body {
+            overflow: hidden;
+            margin: 0px;
+            padding: 0px;
+        }
+
+        #local_view {
+            width: 100%;
+            height: 100%;
+        }
+
+        #remote_views {
+            width: 9%;
+            height: 80%;
+            position: absolute;
+            top: 10%;
+            right: 10%;
+            bottom: 10%;
+            overflow-y: auto;
+        }
+
+        .remote_view {
+            width: 100%;
+            aspect-ratio: 9/16;
+        }
+
+        #left {
+            width: 10%;
+            height: 5%;
+            position: absolute;
+            left: 10%;
+            top: 10%;
+        }
+
+		#p_websocket_state,
+		#input_server_url,
+        .my_button {
+            width: 100%;
+            height: 100%;
+            display: block;
+            margin-bottom: 10%;
+        }
+    </style>
+</head>
+
+<body>
+    <video id="local_view" width="480" height="270" autoplay controls muted></video>
+    <div id="remote_views">
+    </div>
+
+    <div>
+		<p id="p_websocket_state">WebSocket 已断开</p>
+		<input id="input_server_url" type="text" placeholder="请输入服务器地址" value="ws://192.168.1.105:8888"></input>
+		<button id="btn_connect" class="my_button" onclick="connect()">连接 WebSocket</button>
+		<button id="btn_disconnect" class="my_button" onclick="disconnect()">断开 WebSocket</button>
+        <button id="btn_join" class="my_button" onclick="join()">加入房间</button>
+        <button id="btn_quit" class="my_button" onclick="quit()">退出房间</button>
+    </div>
+</body>
+
+<script type="text/javascript">
+    /**
+     * Author: MrQinshou
+     * Email: cqflqinhao@126.com
+     * Date: 2023/4/15 11:24
+     * Description: 生成 uuid
+     */
+    function uuid() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+            var r = Math.random() * 16 | 0;
+            var v = c == 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
+    }
+</script>
+
+<script type="text/javascript">
+    let peerConnectionDict = {};
+    let remoteViewDict = {};
+    var localView = document.getElementById("local_view");
+    var remoteViews = document.getElementById("remote_views");
+    var localStream;
+    let userId = uuid();
+
+    function createPeerConnection(fromUserId) {
+        let peerConnection = new RTCPeerConnection();
+        peerConnection.oniceconnectionstatechange = function (event) {
+            if ("disconnected" == event.target.iceConnectionState) {
+                let peerConnection = peerConnectionDict[fromUserId];
+                if (peerConnection != null) {
+                    peerConnection.close();
+                    delete peerConnectionDict[fromUserId];
+                }
+                let remoteView = remoteViewDict[fromUserId];
+                if (remoteView != null) {
+                    remoteView.removeAttribute('src');
+                    remoteView.load();
+                    remoteView.remove();
+                    delete remoteViewDict[fromUserId];
+                }
+            }
+        }
+        peerConnection.onicecandidate = function (event) {
+            console.log("onicecandidate--->" + event.candidate);
+            let iceCandidate = event.candidate;
+            if (iceCandidate == null) {
+                return;
+            }
+            var jsonObject = {
+                "msgType": "iceCandidate",
+                "fromUserId": userId,
+                "toUserId": fromUserId,
+                "id": iceCandidate.sdpMid,
+                "label": iceCandidate.sdpMLineIndex,
+                "candidate": iceCandidate.candidate
+            };
+            send(JSON.stringify(jsonObject));
+        }
+        peerConnection.ontrack = function (event) {
+            console.log("remote ontrack--->" + event.streams);
+            let streams = event.streams;
+            if (streams == null || streams.length == 0) {
+                return;
+            }
+            let remoteView = remoteViewDict[fromUserId];
+            if (remoteView == null) {
+                return;
+            }
+            remoteView.srcObject = streams[0];
+        }
+        return peerConnection;
+    }
+
+    function createOffer(peerConnection, fromUserId) {
+        peerConnection.createOffer().then(function (sessionDescription) {
+            console.log(fromUserId + " create offer success.");
+            peerConnection.setLocalDescription(sessionDescription).then(function () {
+                console.log(fromUserId + " set local sdp success.");
+                var jsonObject = {
+                    "msgType": "sdp",
+                    "fromUserId": userId,
+                    "toUserId": fromUserId,
+                    "type": "offer",
+                    "sdp": sessionDescription.sdp
+                };
+                send(JSON.stringify(jsonObject));
+            }).catch(function (error) {
+                console.log("error--->" + error);
+            })
+        }).catch(function (error) {
+            console.log("error--->" + error);
+        })
+    }
+
+    function createAnswer(peerConnection, fromUserId) {
+        peerConnection.createAnswer().then(function (sessionDescription) {
+            console.log(fromUserId + " create answer success.");
+            peerConnection.setLocalDescription(sessionDescription).then(function () {
+                console.log(fromUserId + " set local sdp success.");
+                var jsonObject = {
+                    "msgType": "sdp",
+                    "fromUserId": userId,
+                    "toUserId": fromUserId,
+                    "type": "answer",
+                    "sdp": sessionDescription.sdp
+                };
+                send(JSON.stringify(jsonObject));
+            }).catch(function (error) {
+                console.log("error--->" + error);
+            })
+        }).catch(function (error) {
+            console.log("error--->" + error);
+        })
+    }
+
+    function join() {
+        var jsonObject = {
+            "msgType": "join",
+            "userId": userId,
+        };
+        send(JSON.stringify(jsonObject));
+    }
+
+    function quit() {
+        var jsonObject = {
+            "msgType": "quit",
+            "userId": userId,
+        };
+        send(JSON.stringify(jsonObject));
+        for (var key in peerConnectionDict) {
+            let peerConnection = peerConnectionDict[key];
+            peerConnection.close();
+            delete peerConnectionDict[key];
+        }
+        for (var key in remoteViewDict) {
+            let remoteView = remoteViewDict[key];
+            remoteView.removeAttribute('src');
+            remoteView.load();
+            remoteView.remove();
+            delete remoteViewDict[key];
+        }
+    }
+
+    function handleSdp(jsonObject) {
+        let fromUserId = jsonObject["fromUserId"];
+        var peerConnection = peerConnectionDict[fromUserId];
+        if (peerConnection == null) {
+            peerConnection = createPeerConnection(fromUserId);
+            for (let i = 0; localStream != null && i < localStream.getTracks().length; i++) {
+                const track = localStream.getTracks()[i];
+                peerConnection.addTrack(track, localStream);
+            }
+            peerConnectionDict[fromUserId] = peerConnection;
+        }
+        var remoteView = remoteViewDict[fromUserId];
+        if (remoteView == null) {
+            remoteView = document.createElement("video");
+            remoteView.className = "remote_view";
+            remoteView.autoplay = true;
+            remoteView.control = true;
+            remoteView.muted = true;
+            remoteViews.appendChild(remoteView);
+            remoteViewDict[fromUserId] = remoteView;
+        }
+        let options = {
+            "type": jsonObject["type"],
+            "sdp": jsonObject["sdp"]
+        }
+        let sessionDescription = new RTCSessionDescription(options);
+        let type = jsonObject["type"];
+        if ("offer" == type) {
+            peerConnection.setRemoteDescription(sessionDescription).then(function () {
+                console.log(fromUserId + " set remote sdp success.");
+                createAnswer(peerConnection, fromUserId);
+            }).catch(function (error) {
+                console.log("error--->" + error);
+            })
+        } else if ("answer" == type) {
+            peerConnection.setRemoteDescription(sessionDescription).then(function () {
+                console.log(fromUserId + " set remote sdp success.");
+            }).catch(function (error) {
+                console.log("error--->" + error);
+            })
+        }
+    }
+
+    function handleIceCandidate(jsonObject) {
+        let fromUserId = jsonObject["fromUserId"];
+        let peerConnection = peerConnectionDict[fromUserId];
+        if (peerConnection == null) {
+            return
+        }
+        let options = {
+            "sdpMLineIndex": jsonObject["label"],
+            "sdpMid": jsonObject["id"],
+            "candidate": jsonObject["candidate"]
+        }
+        let iceCandidate = new RTCIceCandidate(options);
+        peerConnection.addIceCandidate(iceCandidate);
+    }
+
+    function handleOtherJoin(jsonObject) {
+        let userId = jsonObject["userId"];
+        var peerConnection = peerConnectionDict[userId];
+        console.log("peerConnection == null--->" + (peerConnection == null))
+        if (peerConnection == null) {
+            peerConnection = createPeerConnection(userId);
+            for (let i = 0; localStream != null && i < localStream.getTracks().length; i++) {
+                const track = localStream.getTracks()[i];
+                peerConnection.addTrack(track, localStream);
+            }
+            peerConnectionDict[userId] = peerConnection;
+        }
+        var remoteView = remoteViewDict[userId];
+        console.log("remoteView == null--->" + (remoteView == null))
+        if (remoteView == null) {
+            remoteView = document.createElement("video");
+            remoteView.className = "remote_view";
+            remoteView.autoplay = true;
+            remoteView.control = true;
+            remoteView.muted = true;
+            remoteViews.appendChild(remoteView);
+            remoteViewDict[userId] = remoteView;
+        }
+        createOffer(peerConnection, userId);
+    }
+
+    function handleOtherQuit(jsonObject) {
+        let userId = jsonObject["userId"];
+        let peerConnection = peerConnectionDict[userId];
+        if (peerConnection != null) {
+            peerConnection.close();
+            delete peerConnectionDict[userId];
+        }
+        let remoteView = remoteViewDict[userId];
+        if (remoteView != null) {
+            remoteView.removeAttribute('src');
+            remoteView.load();
+            remoteView.remove();
+            delete remoteViewDict[userId];
+        }
+    }
+
+    navigator.mediaDevices.getUserMedia({ audio: true, video: true }).then(function (mediaStream) {
+		// 初始化 PeerConnectionFactory；
+		// 创建 EglBase；
+		// 创建 PeerConnectionFactory；
+		// 创建音轨；
+		// 创建视轨；
+		localStream = mediaStream;
+		// 初始化本地视频渲染控件；
+		// 初始化远端视频渲染控件；
+		// 开始本地渲染。
+		localView.srcObject = mediaStream;
+    }).catch(function (error) {
+        console.log("error--->" + error);
+    })
+</script>
+
+<script type="text/javascript">
+	var websocket;
+
+	function connect() {
+		let inputServerUrl = document.getElementById("input_server_url");
+		let pWebsocketState = document.getElementById("p_websocket_state");
+		let url = inputServerUrl.value;
+		websocket = new WebSocket(url);
+		websocket.onopen = function () {
+			console.log("onOpen");
+			pWebsocketState.innerText = "WebSocket 已连接";
+		}
+        websocket.onmessage = function (message) {
+            console.log("onmessage--->" + message.data);
+            let jsonObject = JSON.parse(message.data);
+            let msgType = jsonObject["msgType"];
+            if ("sdp" == msgType) {
+                handleSdp(jsonObject);
+            } else if ("iceCandidate" == msgType) {
+                handleIceCandidate(jsonObject);
+            } else if ("otherJoin" == msgType) {
+                handleOtherJoin(jsonObject);
+            } else if ("otherQuit" == msgType) {
+                handleOtherQuit(jsonObject);
+            }
+        }
+        websocket.onclose = function (error) {
+            console.log("onclose--->" + error);
+        }
+        websocket.onerror = function (error) {
+            console.log("onerror--->" + error);
+        }
+    }
+
+	function disconnect() {
+		websocket.close();
+	}
+
+	function send(message) {
+		if (!websocket) {
+			return;
+		}
+		websocket.send(message);
+	}
+
+</script>
+
+</html>

@@ -162,9 +162,7 @@ public class LocalDemoActivity extends AppCompatActivity {
         CameraEnumerator cameraEnumerator = new Camera2Enumerator(LocalDemoActivity.this);
         for (String deviceName : cameraEnumerator.getDeviceNames()) {
             // 前摄像头
-//            if (cameraEnumerator.isFrontFacing(deviceName)) {
-            // 后摄像头
-            if (cameraEnumerator.isBackFacing(deviceName)) {
+            if (cameraEnumerator.isFrontFacing(deviceName)) {
                 videoCapturer = new Camera2Capturer(LocalDemoActivity.this, deviceName, null);
             }
         }

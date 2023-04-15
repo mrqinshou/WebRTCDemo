@@ -16,15 +16,7 @@ public class WebSocketServerHelper {
     private static final String HOST_NAME = "192.168.1.105";
     private static final int PORT = 8888;
 
-    public static void main(String[] args) {
-        try {
-            new WebSocketServerHelper().start();
-        } catch (UnknownHostException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public void start() throws UnknownHostException {
+    public void start() {
         InetSocketAddress inetSocketAddress = new InetSocketAddress(HOST_NAME, PORT);
         mWebSocketServer = new WebSocketServer(inetSocketAddress) {
 
@@ -81,5 +73,9 @@ public class WebSocketServerHelper {
             throw new RuntimeException(e);
         }
         mWebSocketServer = null;
+    }
+
+    public static void main(String[] args) {
+        new WebSocketServerHelper().start();
     }
 }

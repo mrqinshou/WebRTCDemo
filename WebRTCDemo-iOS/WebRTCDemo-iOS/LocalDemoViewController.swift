@@ -147,9 +147,7 @@ class LocalDemoViewController: UIViewController {
         var captureDevice: AVCaptureDevice?
         for c in captureDevices {
             // 前摄像头
-            // if (c.position == .front) {
-            // 后摄像头
-            if (c.position == .back) {
+            if (c.position == .front) {
                 captureDevice = c
                 break
             }

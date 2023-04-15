@@ -75,7 +75,7 @@
 		// 通过 PeerConnection 创建 offer，获取 sdp
 		localPeerConnection.createOffer().then(function (sessionDescription) {
 			console.log("create offer success.");
-			// 将 offer sdp 作为参数 setLocalDescription；
+			// 将 offer sdp 作为参数 setLocalDescription
 			localPeerConnection.setLocalDescription(sessionDescription).then(function () {
 				console.log("set local sdp success.");
 				// 发送 offer sdp
@@ -109,13 +109,13 @@
 		// 将 offer sdp 作为参数 setRemoteDescription
 		remotePeerConnection.setRemoteDescription(offer).then(function () {
 			console.log("set remote sdp success.");
-			// 通过 PeerConnection 创建 answer，获取 sdp；
+			// 通过 PeerConnection 创建 answer，获取 sdp
 			remotePeerConnection.createAnswer().then(function (sessionDescription) {
 				console.log("create answer success.");
-				// 将 answer sdp 作为参数 setLocalDescription；
+				// 将 answer sdp 作为参数 setLocalDescription
 				remotePeerConnection.setLocalDescription(sessionDescription).then(function () {
 					console.log("set local sdp success.");
-					// 发送 answer sdp；
+					// 发送 answer sdp
 					sendAnswer(sessionDescription);
 				})
 			})
@@ -159,15 +159,15 @@
 	}
 
 	navigator.mediaDevices.getUserMedia({ audio: true, video: true }).then(function (mediaStream) {
-		// 初始化 PeerConnectionFactory；
-		// 创建 EglBase；
-		// 创建 PeerConnectionFactory；
-		// 创建音轨；
-		// 创建视轨；
+		// 初始化 PeerConnectionFactory
+		// 创建 EglBase
+		// 创建 PeerConnectionFactory
+		// 创建音轨
+		// 创建视轨
 		localStream = mediaStream;
-		// 初始化本地视频渲染控件；
-		// 初始化远端视频渲染控件；
-		// 开始本地渲染。
+		// 初始化本地视频渲染控件
+		// 初始化远端视频渲染控件
+		// 开始本地渲染
 		localView.srcObject = mediaStream;
 	}).catch(function (error) {
 		console.log("error--->" + error);

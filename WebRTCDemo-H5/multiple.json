@@ -1,0 +1,24 @@
+// 加入房间
+{
+    "msgType": "join",
+    "userId": ""
+}
+// 退出房间
+{
+    "msgType": "quit",
+    "userId": ""
+}
+// 有其他人加入房间
+{
+    "msgType": "otherJoin",
+    "userId": ""
+}
+// 有其他人退出房间
+{
+    "msgType": "otherQuit",
+    "userId": ""
+}
+// sdp
+{}
+// iceCandidate
+{}
