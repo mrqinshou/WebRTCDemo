@@ -13,7 +13,7 @@ public class WebSocketServerHelper {
 
     private WebSocketServer mWebSocketServer;
     private final List<WebSocket> mWebSockets = new ArrayList<>();
-    private static final String HOST_NAME = "192.168.1.105";
+    private static final String HOST_NAME = "192.168.1.104";
     private static final int PORT = 8888;
 
     public void start() {

@@ -53,7 +53,7 @@ class P2PDemoViewController: UIViewController {
         // 服务器地址输入框
         tfServerUrl = UITextField()
         tfServerUrl!.textColor = UIColor.white
-        tfServerUrl!.text = "ws://192.168.1.105:8888"
+        tfServerUrl!.text = "ws://192.168.1.104:8888"
         tfServerUrl!.placeholder = "请输入服务器地址"
         tfServerUrl!.delegate = self
         self.view.addSubview(tfServerUrl!)
@@ -199,9 +199,7 @@ class P2PDemoViewController: UIViewController {
         var captureDevice: AVCaptureDevice?
         for c in captureDevices {
             // 前摄像头
-            // if (c.position == .front) {
-            // 后摄像头
-            if (c.position == .back) {
+             if (c.position == .front) {
                 captureDevice = c
                 break
             }

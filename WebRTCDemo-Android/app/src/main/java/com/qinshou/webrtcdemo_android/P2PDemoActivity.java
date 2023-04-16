@@ -68,7 +68,7 @@ public class P2PDemoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_p2p_demo);
-        ((EditText) findViewById(R.id.et_server_url)).setText("ws://192.168.1.105:8888");
+        ((EditText) findViewById(R.id.et_server_url)).setText("ws://192.168.1.104:8888");
         findViewById(R.id.btn_connect).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -227,9 +227,7 @@ public class P2PDemoActivity extends AppCompatActivity {
         CameraEnumerator cameraEnumerator = new Camera2Enumerator(P2PDemoActivity.this);
         for (String deviceName : cameraEnumerator.getDeviceNames()) {
             // 前摄像头
-//            if (cameraEnumerator.isFrontFacing(deviceName)) {
-            // 后摄像头
-            if (cameraEnumerator.isBackFacing(deviceName)) {
+            if (cameraEnumerator.isFrontFacing(deviceName)) {
                 videoCapturer = new Camera2Capturer(P2PDemoActivity.this, deviceName, null);
             }
         }
