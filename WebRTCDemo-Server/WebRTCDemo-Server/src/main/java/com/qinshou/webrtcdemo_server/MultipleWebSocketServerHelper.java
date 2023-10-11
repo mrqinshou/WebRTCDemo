@@ -167,6 +167,7 @@ public class MultipleWebSocketServerHelper {
 
             @Override
             public void onError(WebSocket conn, Exception ex) {
+                ex.printStackTrace();
                 System.out.println("onError");
             }
 
