@@ -14,4 +14,4 @@ dependencyResolutionManagement {
 }
 rootProject.name = "WebRTCDemo-Server"
 include ':app'
-include ':WebRTCDemoServer'
+include ':WebRTCDemo-Server'

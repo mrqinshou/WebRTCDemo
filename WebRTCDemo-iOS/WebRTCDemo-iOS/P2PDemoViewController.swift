@@ -53,7 +53,8 @@ class P2PDemoViewController: UIViewController {
         // 服务器地址输入框
         tfServerUrl = UITextField()
         tfServerUrl!.textColor = UIColor.white
-        tfServerUrl!.text = "ws://192.168.1.104:8888"
+//        tfServerUrl!.text = "ws://192.168.1.104:8888"
+        tfServerUrl!.text = "ws://172.16.2.57:8888"
         tfServerUrl!.placeholder = "请输入服务器地址"
         tfServerUrl!.delegate = self
         self.view.addSubview(tfServerUrl!)
@@ -138,6 +139,8 @@ class P2PDemoViewController: UIViewController {
             make.centerY.equalToSuperview()
         })
         videoTrack?.add(localView!)
+        // 开始本地渲染
+        (videoCapturer as? RTCCameraVideoCapturer)?.startCapture(with: captureDevice!, format: captureDevice!.activeFormat, fps: P2PDemoViewController.FPS)
         // 初始化远端视频渲染控件
         remoteView = RTCEAGLVideoView()
         remoteView.delegate = self
@@ -148,8 +151,6 @@ class P2PDemoViewController: UIViewController {
             make.top.equalToSuperview().offset(30)
             make.right.equalToSuperview().offset(-30)
         })
-        // 开始本地渲染
-        (videoCapturer as? RTCCameraVideoCapturer)?.startCapture(with: captureDevice!, format: captureDevice!.activeFormat, fps: P2PDemoViewController.FPS)
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -219,6 +220,14 @@ class P2PDemoViewController: UIViewController {
         return peerConnection
     }
     
+    @objc private func connect() {
+        webSocketHelper.connect(url: tfServerUrl!.text!.trimmingCharacters(in: .whitespacesAndNewlines))
+    }
+    
+    @objc private func disconnect() {
+        webSocketHelper.disconnect()
+    }
+    
     @objc private func call() {
         // 创建 PeerConnection
         peerConnection = createPeerConnection()
@@ -238,6 +247,16 @@ class P2PDemoViewController: UIViewController {
                 self.sendOffer(offer: sessionDescription!)
             })
         })
+    }
+    
+    @objc private func hangUp() {
+        // 关闭 PeerConnection
+        peerConnection?.close()
+        peerConnection = nil
+        // 释放远端视频渲染控件
+        if let track = remoteStream?.videoTracks.first {
+            track.remove(remoteView!)
+        }
     }
     
     private func sendOffer(offer: RTCSessionDescription) {
@@ -313,23 +332,6 @@ class P2PDemoViewController: UIViewController {
     
     private func receivedCandidate(iceCandidate: RTCIceCandidate) {
         peerConnection?.add(iceCandidate)
-    }
-    
-    @objc private func hangUp() {
-        // 关闭 PeerConnection
-        peerConnection?.close()
-        peerConnection = nil
-        // 释放远端视频渲染控件
-        if let track = remoteStream?.videoTracks.first {
-            track.remove(remoteView!)
-        }
-    }
-    
-    @objc private func connect() {
-        webSocketHelper.connect(url: tfServerUrl!.text!.trimmingCharacters(in: .whitespacesAndNewlines))
-    }
-    @objc private func disconnect() {
-        webSocketHelper.disconnect()
     }
 }
 

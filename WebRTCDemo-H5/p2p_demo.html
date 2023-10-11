@@ -97,13 +97,22 @@
 		// 通过 PeerConnection 创建 offer，获取 sdp
 		peerConnection.createOffer().then(function (sessionDescription) {
 			console.log("create offer success.");
-			// 将 offer sdp 作为参数 setLocalDescription；
+			// 将 offer sdp 作为参数 setLocalDescription
 			peerConnection.setLocalDescription(sessionDescription).then(function () {
 				console.log("set local sdp success.");
 				// 发送 offer sdp
 				sendOffer(sessionDescription)
 			})
 		})
+	}
+
+	function hangUp() {
+		if (peerConnection != null) {
+			peerConnection.close();
+			peerConnection = null;
+		}
+		remoteView.removeAttribute('src');
+		remoteView.load();
 	}
 
 	function sendOffer(offer) {
@@ -167,15 +176,6 @@
 
 	function receivedCandidate(iceCandidate) {
 		peerConnection.addIceCandidate(iceCandidate);
-	}
-
-	function hangUp() {
-		if (peerConnection != null) {
-			peerConnection.close();
-			peerConnection = null;
-		}
-		remoteView.removeAttribute('src');
-		remoteView.load();
 	}
 
 	navigator.mediaDevices.getUserMedia({ audio: true, video: true }).then(function (mediaStream) {

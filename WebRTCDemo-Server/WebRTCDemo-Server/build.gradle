@@ -10,4 +10,6 @@ java {
 dependencies {
     // WebSocket
     implementation 'org.java-websocket:Java-WebSocket:1.5.3'
+    // Json 解析
+    implementation 'com.google.code.gson:gson:2.10.1'
 }

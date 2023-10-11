@@ -363,6 +363,18 @@ public class P2PDemoActivity extends AppCompatActivity {
         }, mediaConstraints);
     }
 
+    private void hangUp() {
+        // 关闭 PeerConnection
+        if (mPeerConnection != null) {
+            mPeerConnection.close();
+            mPeerConnection.dispose();
+            mPeerConnection = null;
+        }
+        // 释放远端视频渲染控件
+        SurfaceViewRenderer svrRemote = findViewById(R.id.svr_remote);
+        svrRemote.clearImage();
+    }
+
     private void sendOffer(SessionDescription offer) {
         try {
             JSONObject jsonObject = new JSONObject();
@@ -464,17 +476,5 @@ public class P2PDemoActivity extends AppCompatActivity {
 
     private void receivedCandidate(IceCandidate iceCandidate) {
         mPeerConnection.addIceCandidate(iceCandidate);
-    }
-
-    private void hangUp() {
-        // 关闭 PeerConnection
-        if (mPeerConnection != null) {
-            mPeerConnection.close();
-            mPeerConnection.dispose();
-            mPeerConnection = null;
-        }
-        // 释放远端视频渲染控件
-        SurfaceViewRenderer svrRemote = findViewById(R.id.svr_remote);
-        svrRemote.clearImage();
     }
 }

@@ -11,11 +11,11 @@ import org.webrtc.SdpObserver;
 public interface MySdpObserver extends SdpObserver {
     @Override
     default void onCreateFailure(String s) {
-
+        ShowLogUtil.error("onCreateFailure--->" + s);
     }
 
     @Override
     default void onSetFailure(String s) {
-
+        ShowLogUtil.error("onSetFailure--->" + s);
     }
 }

@@ -59,18 +59,18 @@ class MainViewController: UIViewController {
             maker.top.equalTo(btnP2PDemo.snp.bottom).offset(10)
         })
         
-        let btnCustomDemo = UIButton()
-        btnCustomDemo.backgroundColor = UIColor.lightGray
-        btnCustomDemo.setTitle("自定义 demo", for: .normal)
-        btnCustomDemo.setTitleColor(UIColor.black, for: .normal)
-        btnCustomDemo.addTarget(self, action: #selector(customDemo), for: .touchUpInside)
-        self.view.addSubview(btnCustomDemo)
-        btnCustomDemo.snp.makeConstraints({ maker in
-            maker.left.equalToSuperview().offset(30)
-            maker.right.equalToSuperview().offset(-30)
-            maker.height.equalTo(40)
-            maker.top.equalTo(btnMultipleDemo.snp.bottom).offset(10)
-        })
+//        let btnCustomDemo = UIButton()
+//        btnCustomDemo.backgroundColor = UIColor.lightGray
+//        btnCustomDemo.setTitle("自定义 demo", for: .normal)
+//        btnCustomDemo.setTitleColor(UIColor.black, for: .normal)
+//        btnCustomDemo.addTarget(self, action: #selector(customDemo), for: .touchUpInside)
+//        self.view.addSubview(btnCustomDemo)
+//        btnCustomDemo.snp.makeConstraints({ maker in
+//            maker.left.equalToSuperview().offset(30)
+//            maker.right.equalToSuperview().offset(-30)
+//            maker.height.equalTo(40)
+//            maker.top.equalTo(btnMultipleDemo.snp.bottom).offset(10)
+//        })
     }
     
     @objc private func localDemo() {
@@ -82,7 +82,7 @@ class MainViewController: UIViewController {
     }
     
     @objc private func multipleDemo() {
-//        self.navigationController?.pushViewController(MultipleDemoViewController(), animated: true)
+        self.navigationController?.pushViewController(MultipleDemoViewController(), animated: true)
     }
     
     @objc private func customDemo() {

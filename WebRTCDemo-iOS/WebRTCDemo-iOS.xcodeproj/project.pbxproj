@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3B0892992AD54F9E00F79123 /* MultipleDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B0892982AD54F9E00F79123 /* MultipleDemoViewController.swift */; };
+		3B08929B2AD5539A00F79123 /* UIScrollViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B08929A2AD5539A00F79123 /* UIScrollViewExtension.swift */; };
 		3B508F8F29E84A9600CAE104 /* P2PDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B508F8E29E84A9600CAE104 /* P2PDemoViewController.swift */; };
 		3B508F9129E84B1600CAE104 /* WebSocketClientHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B508F9029E84B1600CAE104 /* WebSocketClientHelper.swift */; };
 		3B86F1D829E45E9A00E1ED22 /* ShowLogUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B86F1D729E45E9A00E1ED22 /* ShowLogUtil.swift */; };
@@ -21,6 +23,8 @@
 
 /* Begin PBXFileReference section */
 		36079C6E934B6F597311FE2D /* Pods_WebRTCDemo_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WebRTCDemo_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3B0892982AD54F9E00F79123 /* MultipleDemoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MultipleDemoViewController.swift; sourceTree = "<group>"; };
+		3B08929A2AD5539A00F79123 /* UIScrollViewExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIScrollViewExtension.swift; sourceTree = "<group>"; };
 		3B508F8E29E84A9600CAE104 /* P2PDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = P2PDemoViewController.swift; sourceTree = "<group>"; };
 		3B508F9029E84B1600CAE104 /* WebSocketClientHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebSocketClientHelper.swift; sourceTree = "<group>"; };
 		3B86F1D729E45E9A00E1ED22 /* ShowLogUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShowLogUtil.swift; sourceTree = "<group>"; };
@@ -84,11 +88,13 @@
 				3BF85F0129E45C8F008FA2C1 /* WebRTCDemo-iOS-Bridging-Header.h */,
 				3BF85F0229E45C8F008FA2C1 /* AppDelegate.swift */,
 				3BF85F0429E45C9C008FA2C1 /* MainViewController.swift */,
+				3B0892982AD54F9E00F79123 /* MultipleDemoViewController.swift */,
 				3BF85F0629E45CA2008FA2C1 /* LocalDemoViewController.swift */,
 				3B508F8E29E84A9600CAE104 /* P2PDemoViewController.swift */,
 				3B86F1D929E4628D00E1ED22 /* RTCSimluatorVideoEncoderFactory.swift */,
 				3B86F1DA29E4628D00E1ED22 /* RTCSimulatorVideoDecoderFactory.swift */,
 				3B86F1D729E45E9A00E1ED22 /* ShowLogUtil.swift */,
+				3B08929A2AD5539A00F79123 /* UIScrollViewExtension.swift */,
 				3B508F9029E84B1600CAE104 /* WebSocketClientHelper.swift */,
 			);
 			path = "WebRTCDemo-iOS";
@@ -221,7 +227,9 @@
 				3B508F8F29E84A9600CAE104 /* P2PDemoViewController.swift in Sources */,
 				3B86F1D829E45E9A00E1ED22 /* ShowLogUtil.swift in Sources */,
 				3BF85F0529E45C9C008FA2C1 /* MainViewController.swift in Sources */,
+				3B08929B2AD5539A00F79123 /* UIScrollViewExtension.swift in Sources */,
 				3B508F9129E84B1600CAE104 /* WebSocketClientHelper.swift in Sources */,
+				3B0892992AD54F9E00F79123 /* MultipleDemoViewController.swift in Sources */,
 				3B86F1DC29E4628D00E1ED22 /* RTCSimulatorVideoDecoderFactory.swift in Sources */,
 				3BF85F0729E45CA2008FA2C1 /* LocalDemoViewController.swift in Sources */,
 			);
