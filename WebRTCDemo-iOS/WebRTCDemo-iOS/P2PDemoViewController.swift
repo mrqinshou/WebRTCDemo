@@ -53,8 +53,7 @@ class P2PDemoViewController: UIViewController {
         // 服务器地址输入框
         tfServerUrl = UITextField()
         tfServerUrl!.textColor = UIColor.white
-//        tfServerUrl!.text = "ws://192.168.1.104:8888"
-        tfServerUrl!.text = "ws://172.16.2.57:8888"
+        tfServerUrl!.text = "ws://192.168.1.104:8888"
         tfServerUrl!.placeholder = "请输入服务器地址"
         tfServerUrl!.delegate = self
         self.view.addSubview(tfServerUrl!)

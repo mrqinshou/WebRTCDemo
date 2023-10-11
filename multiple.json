@@ -1,0 +1,42 @@
+// sdp
+{
+    "msgType": "sdp",
+    "fromUserId": userId,
+    "toUserId": toUserId,
+    "type": sessionDescription.type,
+    "sdp": sessionDescription.sdp
+}
+ 
+// iceCandidate
+{
+	"msgType": "iceCandidate",
+    	"fromUserId": userId,
+	"toUserId": toUserId,
+	"id": iceCandidate.sdpMid,
+	"label": iceCandidate.sdpMLineIndex,
+	"candidate": iceCandidate.candidate
+}
+
+// join
+{
+    "msgType": "join"
+    "userId": userId
+}
+
+// otherJoin
+{
+    "msgType": "otherJoin"
+    "userId": userId
+}
+
+// quit
+{
+    "msgType": "quit"
+    "userId": userId
+}
+
+// otherQuit
+{
+    "msgType": "otherQuit"
+    "userId": userId
+}

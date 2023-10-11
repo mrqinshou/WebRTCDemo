@@ -77,8 +77,7 @@ public class MultipleDemoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_multiple_demo);
-//        ((EditText) findViewById(R.id.et_server_url)).setText("ws://192.168.1.104:8888");
-        ((EditText) findViewById(R.id.et_server_url)).setText("ws://172.16.2.57:8888");
+        ((EditText) findViewById(R.id.et_server_url)).setText("ws://192.168.1.104:8888");
         findViewById(R.id.btn_connect).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
